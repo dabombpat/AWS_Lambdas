@@ -16,11 +16,13 @@ let response;
  */
 exports.lambdaHandler = async (event, context) => {
     try {
+        
+        let number = 1;
         // const ret = await axios(url);
         response = {
             'statusCode': 200,
             'body': JSON.stringify({
-                message: 'hello world',
+                result: number,
                 // location: ret.data.trim()
             })
         }
