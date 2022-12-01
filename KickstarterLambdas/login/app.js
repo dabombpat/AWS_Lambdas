@@ -48,10 +48,10 @@ exports.lambdaHandler = async (event, context, callback) => {
     let actual_event = event.body
     let info = JSON.parse(actual_event)
     
-    let InsertDesignerLogin = (username, password,role) => {
+    let Login = (username, password) => {
         return new Promise((resolve,reject) => {
-            pool.query("INSERT INTO Register (username, password,role) VALUES(?,?,?)", [username, password,role], (error, rows) => {
-                if(error) {return reject("Invalid Username or Password");}
+            pool.query("SELECT * FROM Register WHERE username = ? AND password = ?" , [username, password], (error, rows) => {
+                if(error) {return reject("Invalid Login");}
                 if((rows && rows.length == 1)){
                     return resolve(true);
                 } else {
@@ -60,10 +60,10 @@ exports.lambdaHandler = async (event, context, callback) => {
             });
         })}
     try {
-        const inserted = await InsertDesignerLogin(info.username, info.password, info.role);
+        const inserted = await Login(info.username, info.password);
         if(inserted) {
             response.statusCode=  200;
-            response.body = "successfully inserted";
+            response.body = "Logged in";
         } else {
             response.statusCode = 400;
             response.error = "Invald Username or Password";

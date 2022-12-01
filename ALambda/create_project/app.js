@@ -69,6 +69,40 @@ exports.lambdaHandler = async (event, context) => {
         
         //
         
+        let InsertNewProject = (project_name, project_story, designer_name, project_genre, fundraising_goal, project_deadline) => {
+            console.log("inserting new project to database");
+            return new Promise((resolve,reject) => {
+                console.log("yup, next step")
+                pool.query("INSERT INTO Projects (username, name, story, type, goal, funds, deadline, launched) VALUES(?,?,?,?,?,?,?,?)", [designer_name, project_name, project_story, project_genre, fundraising_goal, "0", project_deadline, "false"], (error, rows) => {
+                    if(error) {return reject("Unable to list Projects");}
+                    else {
+                        console.log("FUCK YEAH");
+                        status = 200;
+                        body["result"] = "Finished adding designer to database"
+                        return resolve(true);
+                    }
+                });
+            });}    
+        
+            try {
+        
+        
+        const created = await InsertNewProject(project_name, project_story, designer_name, project_genre, fundraising_goal, project_deadline);
+        if(created) {
+            console.log("here");
+            response.statusCode=  200;
+            response.body = "successfully created" ;
+        } else {
+            response.statusCode = 400;
+            console.log("here@!!");
+            response.error = "unable to create project";
+        }
+        
+        } catch (error) {
+        console.log("here!");
+        response.statusCode = 400;
+        response.error = error;
+        }
         
         
         // let ListDesigners = (username,password) => {
@@ -93,29 +127,17 @@ exports.lambdaHandler = async (event, context) => {
         //         });
         //     })}
             
-        // let InsertNewDesigner = (username, password) => {
-        //     console.log("inserting new designer");
-        //     return new Promise((resolve,reject) => {
-        //         pool.query("INSERT INTO Register (username,password) VALUES(?,?)", [username, password], (error, rows) => {
-        //             if(error) {return reject("Unable to list Projects");}
-        //             else {
-        //                 console.log("Sucess");
-        //                 status = 200;
-        //                 body["result"] = "Finished adding designer to database"
-        //                 return resolve(true);
-        //             }
-        //         });
-        //     });}    
-            
-            
-        try {
-            console.log('we getting here?');
-            status = 200
 
-        } catch (error) {
-            response.statusCode = 400;
-            response.error = error;
-        }
+            
+            
+        // try {
+        //     console.log('we getting here?');
+        //     status = 200
+
+        // } catch (error) {
+        //     response.statusCode = 400;
+        //     response.error = error;
+        // }
         
         //console.log(response);
         
