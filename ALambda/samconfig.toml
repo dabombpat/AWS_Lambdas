@@ -2,9 +2,9 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "ALambdaFunction"
+stack_name = "createproject"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1rrsgknsg5p1k"
-s3_prefix = "ALambdaFunction"
+s3_prefix = "createproject"
 region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"

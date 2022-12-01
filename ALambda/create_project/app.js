@@ -44,77 +44,73 @@ exports.lambdaHandler = async (event, context) => {
     let body = {};
     var userpasswords = {};
     console.log("Login or Register!")
+    //console.log("newlog")
     
     try {
         //console.log(event);
         let actual_event = event.body;
-        //console.log(actual_event)
+        console.log(actual_event)
         let info = JSON.parse(actual_event);
-        //console.log(info)
+        console.log(info)
         
-        let email = info['arg1'];
-        let password = info['arg2'];
-        let LoginOrRegister = info['arg3'];
-        console.log("email : ", email)
-        console.log("password : ", password)
-        console.log("LoginOrRegister : ", LoginOrRegister)
+        let project_name = info['arg1'];
+        let project_story = info['arg2'];
+        let designer_name = info['arg3'];
+        let project_genre = info['arg4'];
+        let fundraising_goal = info['arg5'];
+        let project_deadline = info['arg6'];
+
+        console.log("project_name : ", project_name)
+        console.log("project_story : ", project_story)
+        console.log("designer_name : ", designer_name)
+        console.log("project_genre : ", project_genre)
+        console.log("fundraising_goal : ", fundraising_goal)
+        console.log("project_deadline : ", project_deadline)
         
-        let ListDesigners = (username,password) => {
-            console.log('Listing users with that username');
-            return new Promise((resolve,reject) => {
-                pool.query("SELECT * FROM Register WHERE username=?", [username], (error, rows) => {
-                    if(error) {return reject("Unable to list Projects");}
-                    else {
-                        console.log('Users : ');
-                        console.log(rows);
-                        if(username == rows[0].username){
-                            console.log("found name")
-                            console.log(username)
-                            console.log(password)
-                            if(password == rows[0].password){
-                                console.log("Found User!")
-                                status = 205;
-                            }
-                        }
-                        return resolve(rows);
-                    } //
-                });
-            })}
+        //
+        
+        
+        
+        // let ListDesigners = (username,password) => {
+        //     console.log('Listing users with that username');
+        //     return new Promise((resolve,reject) => {
+        //         pool.query("SELECT * FROM Register WHERE username=?", [username], (error, rows) => {
+        //             if(error) {return reject("Unable to list Projects");}
+        //             else {
+        //                 console.log('Users : ');
+        //                 console.log(rows);
+        //                 if(username == rows[0].username){
+        //                     console.log("found name")
+        //                     console.log(username)
+        //                     console.log(password)
+        //                     if(password == rows[0].password){
+        //                         console.log("Found User!")
+        //                         status = 205;
+        //                     }
+        //                 }
+        //                 return resolve(rows);
+        //             }
+        //         });
+        //     })}
             
-        let InsertNewDesigner = (username, password) => {
-            console.log("inserting new designer");
-            return new Promise((resolve,reject) => {
-                pool.query("INSERT INTO Register (username,password) VALUES(?,?)", [username, password], (error, rows) => {
-                    if(error) {return reject("Unable to list Projects");}
-                    else {
-                        console.log("Sucess");
-                        status = 200;
-                        body["result"] = "Finished adding designer to database"
-                        return resolve(true);
-                    }
-                });
-            });}    
+        // let InsertNewDesigner = (username, password) => {
+        //     console.log("inserting new designer");
+        //     return new Promise((resolve,reject) => {
+        //         pool.query("INSERT INTO Register (username,password) VALUES(?,?)", [username, password], (error, rows) => {
+        //             if(error) {return reject("Unable to list Projects");}
+        //             else {
+        //                 console.log("Sucess");
+        //                 status = 200;
+        //                 body["result"] = "Finished adding designer to database"
+        //                 return resolve(true);
+        //             }
+        //         });
+        //     });}    
             
             
         try {
-            console.log('how about here?');
-            if(LoginOrRegister == 'R'){
-                console.log("LoR = R");
-                const registereddesigner = await InsertNewDesigner(email, password);
-                console.log("finished inserting new designer");
-            }
-            
-            if(LoginOrRegister == 'L'){
-                const designers = await ListDesigners(email, password);
-                if(designers.length != 0) {
-                    console.log("designer list :")
-                    console.log(designers)
-                } else {
-                    status = 400;
-                    body["result"] = "There are no registered designers with this username" ;
-                }
-            }    
-                
+            console.log('we getting here?');
+            status = 200
 
         } catch (error) {
             response.statusCode = 400;
