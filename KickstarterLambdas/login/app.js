@@ -55,7 +55,7 @@ exports.lambdaHandler = async (event, context, callback) => {
                 if((rows && rows.length == 1)){
                     return resolve(true);
                 } else {
-                    return resolve(true);
+                    return reject("Invalid Username or Password");
                 }
             });
         })}
