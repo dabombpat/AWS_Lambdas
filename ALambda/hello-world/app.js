@@ -59,12 +59,23 @@ exports.lambdaHandler = async (event, context) => {
         console.log("password : ", password)
         console.log("LoginOrRegister : ", LoginOrRegister)
         
-        let ListDesigners = (username) => {
-            console.log('gets hungup here?');
+        let ListDesigners = (username,password) => {
+            console.log('Listing users with that username');
             return new Promise((resolve,reject) => {
                 pool.query("SELECT * FROM Register WHERE username=?", [username], (error, rows) => {
                     if(error) {return reject("Unable to list Projects");}
                     else {
+                        console.log('Users : ');
+                        console.log(rows);
+                        if(username == rows[0].username){
+                            console.log("found name")
+                            console.log(username)
+                            console.log(password)
+                            if(password == rows[0].password){
+                                console.log("Found User!")
+                                status = 205;
+                            }
+                        }
                         return resolve(rows);
                     }
                 });
@@ -77,6 +88,8 @@ exports.lambdaHandler = async (event, context) => {
                     if(error) {return reject("Unable to list Projects");}
                     else {
                         console.log("Sucess");
+                        status = 200;
+                        body["result"] = "Finished adding designer to database"
                         return resolve(true);
                     }
                 });
@@ -92,13 +105,13 @@ exports.lambdaHandler = async (event, context) => {
             }
             
             if(LoginOrRegister == 'L'){
-                const designers = await ListDesigners(info.username);
+                const designers = await ListDesigners(email, password);
                 if(designers.length != 0) {
-                    response.statusCode=  200;
-                    response.result = designers ;
+                    console.log("designer list :")
+                    console.log(designers)
                 } else {
-                    response.statusCode = 400;
-                    response.error = "There are no registered designers with this username";
+                    status = 400;
+                    body["result"] = "There are no registered designers with this username" ;
                 }
             }    
                 
@@ -200,8 +213,8 @@ exports.lambdaHandler = async (event, context) => {
         
         headers: {
             "Access-Control-Allow-Headers" : "Content-Type",
-            "Access-Control-Allow-Origin" : "'", // Allow from anywhere
-            "Access-Control-Allow-Methods" : "POST" // Allow Post request
+            "Access-Control-Allow-Origin" : "*", // Allow from anywhere
+            "Access-Control-Allow-Methods" : "POST, GET" // Allow Post request
         },
         
         'body' : JSON.stringify(body)
