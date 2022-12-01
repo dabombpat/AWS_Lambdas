@@ -1,4 +1,4 @@
-npm'use strict';
+'use strict';
 
 const app = require('../../app.js');
 const chai = require('chai');

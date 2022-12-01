@@ -14,6 +14,7 @@ let response;
  * @returns {Object} object - API Gateway Lambda Proxy Output Format
  * 
  */
+ 
 exports.lambdaHandler = async (event, context) => {
     let status;
     let body = {};
@@ -21,33 +22,31 @@ exports.lambdaHandler = async (event, context) => {
     try {
         console.log(event);
         let actual_event = event.body;
+        console.log(actual_event)
         let info = JSON.parse(actual_event);
-        let number = 1;
+        console.log(info)
         
-        let email = event.arg1;
-        let password = event.arg2;
+        let email = info['arg1'];
+        let password = info['arg2'];
+        console.log(email)
+        console.log(password)
         
         if(email == "patflan"){
-            if (password == flan){
-                status = 200
+            if (password == "flan"){
+                status = 200;
+                body["result"] = "Good Username and Password"
             }        
             
         } else{
-            status = 400;
-            body["Incorrect Username or Password"]
+            status = 402;
+            body["error"] = "Incorrect Username or Password";
         }
         
-        // const ret = await axios(url);
-        response = {
-            'statusCode': 200,
-            'body': JSON.stringify({
-                result: number,
-                // location: ret.data.trim()
-            })
-        }
+
+
     } catch (err) {
         console.log(err);
-        status = 400;
+        status = 401;
         body["error"] = err.toString();
     }
     

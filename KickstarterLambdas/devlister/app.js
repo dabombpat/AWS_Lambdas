@@ -42,31 +42,29 @@ exports.lambdaHandler = async (event, context, callback) => {
         headers: {
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST"
+            "Access-Control-Allow-Methods": "GET"
         }
     };
     let actual_event = event.body
     let info = JSON.parse(actual_event)
     
-    let InsertDesignerLogin = (username, password) => {
+    let ListDesignerProjects = (username) => {
         return new Promise((resolve,reject) => {
-            pool.query("INSERT INTO Register (username, password) VALUES(?,?)", [username, password], (error, rows) => {
-                if(error) {return reject("Invalid Username or Password");}
-                if((rows && rows.length == 1)){
-                    return resolve(true);
-                } else {
-                    return resolve(true);
+            pool.query("SELECT * FROM Projects WHERE username=?", [username], (error, rows) => {
+                if(error) {return reject("Unable to list Projects");}
+                else {
+                    return resolve(rows);
                 }
             });
         })}
     try {
-        const inserted = await InsertDesignerLogin(info.username, info.password);
-        if(inserted) {
+        const projects = await ListDesignerProjects(info.username);
+        if(projects.length != 0) {
             response.statusCode=  200;
-            response.body = "successfully inserted";
+            response.result = projects ;
         } else {
             response.statusCode = 400;
-            response.error = "Invald Username or Password";
+            response.error = "You have no projects";
         }
         
     } catch (error) {

@@ -48,25 +48,26 @@ exports.lambdaHandler = async (event, context, callback) => {
     let actual_event = event.body
     let info = JSON.parse(actual_event)
     
-    let InsertDesignerLogin = (username, password) => {
+    let createProject = (projectname,reward,amount,maxsupporters) => {
         return new Promise((resolve,reject) => {
-            pool.query("INSERT INTO Register (username, password) VALUES(?,?)", [username, password], (error, rows) => {
-                if(error) {return reject("Invalid Username or Password");}
-                if((rows && rows.length == 1)){
-                    return resolve(true);
-                } else {
+            pool.query("INSERT INTO pledges (projectname, reward, amount, maxsupporters, currentsupporters) VALUES(?,?,?,?,?)", [projectname,reward,amount,maxsupporters,0], (error, rows) => {
+                if(error) {return reject("pledge must have a unique reward");}
+                if(rows && rows.length == 1){
+                    return resolve(true)
+                }
+                else {
                     return resolve(true);
                 }
             });
         })}
     try {
-        const inserted = await InsertDesignerLogin(info.username, info.password);
-        if(inserted) {
+        const created = await createProject(info.projectname, info.reward, info.amount, info.maxsupporters);
+        if(created) {
             response.statusCode=  200;
-            response.body = "successfully inserted";
+            response.body = "successfully created" ;
         } else {
             response.statusCode = 400;
-            response.error = "Invald Username or Password";
+            response.error = "unable to create pledge";
         }
         
     } catch (error) {
