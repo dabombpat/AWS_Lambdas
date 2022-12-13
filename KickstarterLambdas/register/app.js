@@ -59,6 +59,18 @@ exports.lambdaHandler = async (event, context, callback) => {
                 }
             });
         })}
+    let createFunds = (username) => {
+        return new Promise((resolve,reject) => {
+            pool.query("INSERT INTO funds (username, funds ) VALUES(?,?)", [username,10000], (error, rows) => {
+                if(error) {return reject("Unable to create funds");}
+                if((rows && rows.length == 1)){
+                    return resolve(true);
+                } else {
+                    return resolve(true);
+                }
+            });
+        })}
+        
     try {
         const inserted = await InsertDesignerLogin(info.username, info.password, info.role);
         if(inserted) {
@@ -67,6 +79,16 @@ exports.lambdaHandler = async (event, context, callback) => {
         } else {
             response.statusCode = 400;
             response.error = "Invald Username or Password";
+        }
+        if(info.role=="Supporter"){
+            const fundsinserted = await createFunds(info.username);
+        if(fundsinserted) {
+            response.statusCode=  200;
+            response.body = "successfully inserted";
+        } else {
+            response.statusCode = 400;
+            response.error = "Invald fund creation";
+        }
         }
         
     } catch (error) {

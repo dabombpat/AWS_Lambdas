@@ -42,7 +42,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         headers: {
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET"
+            "Access-Control-Allow-Methods": "POST"
         }
     };
     let actual_event = event.body
@@ -61,7 +61,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         const projects = await ListDesignerProjects(info.username);
         if(projects.length != 0) {
             response.statusCode=  200;
-            response.result = projects ;
+            response.body = projects;
         } else {
             response.statusCode = 400;
             response.error = "You have no projects";

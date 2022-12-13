@@ -48,7 +48,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     let actual_event = event.body
     let info = JSON.parse(actual_event)
     
-    let createProject = (projectname,reward,amount,maxsupporters) => {
+    let createPledge = (projectname,reward,amount,maxsupporters) => {
         return new Promise((resolve,reject) => {
             pool.query("INSERT INTO pledges (projectname, reward, amount, maxsupporters, currentsupporters) VALUES(?,?,?,?,?)", [projectname,reward,amount,maxsupporters,0], (error, rows) => {
                 if(error) {return reject("pledge must have a unique reward");}
@@ -61,7 +61,7 @@ exports.lambdaHandler = async (event, context, callback) => {
             });
         })}
     try {
-        const created = await createProject(info.projectname, info.reward, info.amount, info.maxsupporters);
+        const created = await createPledge(info.projectname, info.reward, info.amount, info.maxsupporters);
         if(created) {
             response.statusCode=  200;
             response.body = "successfully created" ;

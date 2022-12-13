@@ -53,17 +53,17 @@ exports.lambdaHandler = async (event, context, callback) => {
             pool.query("SELECT * FROM Register WHERE username = ? AND password = ?" , [username, password], (error, rows) => {
                 if(error) {return reject("Invalid Login");}
                 if((rows && rows.length == 1)){
-                    return resolve(true);
+                    return resolve(rows);
                 } else {
                     return reject("Invalid Username or Password");
                 }
             });
         })}
     try {
-        const inserted = await Login(info.username, info.password);
-        if(inserted) {
+        const profile = await Login(info.username, info.password);
+        if(profile.length !=0) {
             response.statusCode=  200;
-            response.body = "Logged in";
+            response.body = profile[0].role;
         } else {
             response.statusCode = 400;
             response.error = "Invald Username or Password";

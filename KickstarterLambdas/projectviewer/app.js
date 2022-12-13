@@ -42,7 +42,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         headers: {
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET"
+            "Access-Control-Allow-Methods": "POST"
         }
     };
     let actual_event = event.body
