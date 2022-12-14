@@ -60,11 +60,24 @@ exports.lambdaHandler = async (event, context, callback) => {
                 }
             });
         })}
+    
+    let getfunds = (username) => {
+    return new Promise((resolve,reject) => {
+        pool.query("SELECT * FROM funds WHERE username=?", [username], (error, rows) => {
+                if(error) {return reject("Unable to return funds");}
+                else {
+                    return resolve(rows);
+                }
+            });
+        })}
+        
+        
     try {
         const launched = await addfunds(info.funds, info.username);
         if(launched) {
             response.statusCode=  200;
-            response.body = "successfully added funds" ;
+            const funds = await getfunds(info.username)
+            response.body = funds;
         } else {
             response.statusCode = 400;
             response.error = "unable to add the funds";
