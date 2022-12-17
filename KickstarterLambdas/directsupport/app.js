@@ -83,9 +83,9 @@ exports.lambdaHandler = async (event, context, callback) => {
             });
         })}   
         
-        //info needed: username,project name, pledge reward, pledge amount, pledge maxsupporters, pledge current supporters
+        //info needed: username,project name, , pledge amount, (Pat says I'm not sure we need these ->)pledge reward pledge maxsupporters, pledge current supporters
     try {
-        console.log(info.username + info.projectname+info.amount+info.reward);
+        //console.log(info.username + info.projectname+info.amount+info.reward);
         let fundsremoved = await removefunds(info.username, info.amount);
         if(fundsremoved){
             response.statusCode=200;

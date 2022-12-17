@@ -48,36 +48,24 @@ exports.lambdaHandler = async (event, context, callback) => {
     let actual_event = event.body
     let info = JSON.parse(actual_event)
     
-    let failproject = (username,name) => {
+    let getactivity = (project) => {
         return new Promise((resolve,reject) => {
-            pool.query("Update Projects Set failed = true where username = ? and name = ?", [username,name], (error, rows) => {
-                if(error) {return reject("cannot fail project");}
-                if(rows && rows.length == 1){
-                    return resolve(true);
-                }
+            pool.query("Select * from Activity where project = ?", [project], (error, rows) => {
+                if(error) {return reject("cannot get activity");}
                 else {
-                    return resolve(true);
+                    return resolve(rows);
                 }
             });
         })}
     try {
-        const currentdate = new Date();
-        console.log("currentdate" , currentdate);
-        //date MUST BE IN MM/DD/YYYY
-        const deadline =  new Date(info.deadline);
-        console.log("deadline", deadline);
-        if(info.success== false && currentdate>deadline){
-            const launched = await failproject(info.username, info.name);
-            if(launched) {
-                response.statusCode=  200;
-                response.body = "successfully failed project" ;
-            } else {
-                response.statusCode = 400;
-                response.error = "unable to fail project";
-            }
+        const activity = await getactivity(info.name);
+        if (activity.length !=0){
+            response.statuscode = 200;
+            response.result = activity;
         }
-        else{
-            response.body="project not failed";
+        else {
+            response.statuscode = 400;
+            response.error="you have no activity"
         }
     } catch (error) {
         response.statusCode = 400;

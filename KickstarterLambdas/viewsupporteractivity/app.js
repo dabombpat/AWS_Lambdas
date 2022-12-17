@@ -42,32 +42,31 @@ exports.lambdaHandler = async (event, context, callback) => {
         headers: {
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET"
+            "Access-Control-Allow-Methods": "POST"
         }
     };
-    /*let actual_event = event.body
-    let info = JSON.parse(actual_event)*/
-    //admin can view everything, no need for info
+    let actual_event = event.body
+    let info = JSON.parse(actual_event)
     
-    let ListFailedDesignerProjects = () => {
+    let getactivity = (supporter) => {
         return new Promise((resolve,reject) => {
-            pool.query("SELECT * FROM Projects where failed = true", (error, rows) => {
-                if(error) {return reject("Unable to list Projects");}
+            pool.query("Select * from Activity where supporter = ?", [supporter], (error, rows) => {
+                if(error) {return reject("cannot get activity");}
                 else {
                     return resolve(rows);
                 }
             });
         })}
     try {
-        const projects = await ListFailedDesignerProjects();
-        if(projects.length != 0) {
-            response.statusCode=  200;
-            response.result = projects ;
-        } else {
-            response.statusCode = 400;
-            response.error = "there are no projects";
+        const activity = await getactivity(info.supporter);
+        if (activity.length !=0){
+            response.statuscode = 200;
+            response.result = activity;
         }
-        
+        else {
+            response.statuscode = 400;
+            response.error="you have no activity"
+        }
     } catch (error) {
         response.statusCode = 400;
         response.error = error;

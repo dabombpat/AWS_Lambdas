@@ -48,9 +48,9 @@ exports.lambdaHandler = async (event, context, callback) => {
     let actual_event = event.body
     let info = JSON.parse(actual_event)
     
-    let ListDesignerProjects = (genre) => {
+    let ListDesignerProjects = (search) => {
         return new Promise((resolve,reject) => {
-            pool.query("SELECT * FROM Projects WHERE type=? and launched= true", [genre], (error, rows) => {
+            pool.query("SELECT * FROM Projects WHERE (type=? or story LIKE ?) and launched= true and failed = false", [search,('%' + search + '%')], (error, rows) => {
                 if(error) {return reject("Unable to find Projects");}
                 else {
                     return resolve(rows);

@@ -106,6 +106,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         
         //info needed: username,project name, pledge reward, pledge amount, pledge maxsupporters, pledge current supporters
     try {
+    if(info.maxsupporters == null || info.currentsupporters<info.maxsupporters){
         console.log(info.username + info.projectname+info.amount+info.reward);
             const incrementedsupporters=await addsupportertopledges(info.projectname, info.reward);
             if(incrementedsupporters){
@@ -152,7 +153,11 @@ exports.lambdaHandler = async (event, context, callback) => {
                 response.statusCode = 400;
                 response.error = "Unable to increment Pledge";
             }
-        
+    }
+    else{
+        response.statusCode=400;
+        response.error = "pledge is at max supporters";
+    }
     } catch (error) {
         response.statusCode = 400;
         response.error = error;

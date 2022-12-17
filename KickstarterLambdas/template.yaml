@@ -229,33 +229,33 @@ Resources:
           Properties:
             Path: /addfunds
             Method: post
-  satisfydeadline:
+  viewsupporteractivity:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: satisfydeadline/
+      CodeUri: viewsupporteractivity/
       Handler: app.lambdaHandler
       Runtime: nodejs14.x
       Architectures:
         - x86_64
       Events:
-        satisfydeadline:
+        viewsupporteractivity:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /satisfydeadline
+            Path: /viewsupporteractivity
             Method: post
-  failproject:
+  viewprojectactivity:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: failproject/
+      CodeUri: viewprojectactivity/
       Handler: app.lambdaHandler
       Runtime: nodejs14.x
       Architectures:
         - x86_64
       Events:
-        failproject:
+        viewprojectactivity:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /failproject
+            Path: /viewprojectactivity
             Method: post
   directsupport:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -271,17 +271,17 @@ Resources:
           Properties:
             Path: /directsupport
             Method: post
-  listfailedprojects:
+  reapprojects:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: listfailedprojects/
+      CodeUri: reapprojects/
       Handler: app.lambdaHandler
       Runtime: nodejs14.x
       Architectures:
         - x86_64
       Events:
-        listfailedprojects:
+        reapprojects:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /listfailedprojects
+            Path: /reapprojects
             Method: get

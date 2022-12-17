@@ -61,7 +61,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         })}
     let createFunds = (username) => {
         return new Promise((resolve,reject) => {
-            pool.query("INSERT INTO funds (username, funds ) VALUES(?,?)", [username,10000], (error, rows) => {
+            pool.query("INSERT INTO funds (username, funds ) VALUES(?,?)", [username,0], (error, rows) => {
                 if(error) {return reject("Unable to create funds");}
                 if((rows && rows.length == 1)){
                     return resolve(true);
